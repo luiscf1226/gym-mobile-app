@@ -5,6 +5,14 @@ import {
   ThemeProvider as RNTheme,
 } from "@react-navigation/native";
 import { useColorScheme } from "react-native";
+import React, { createContext, useContext } from "react";
+import theme from "@/app/theme";
+
+// Create a theme context
+const ThemeContext = createContext(theme);
+
+// Export a hook to use theme
+export const useTheme = () => useContext(ThemeContext);
 
 // Use exact native P3 colors and equivalents on Android/web.
 // This lines up well with React Navigation.
@@ -33,14 +41,24 @@ import { useColorScheme } from "react-native";
 
 export default function ThemeProvider(props: { children: React.ReactNode }) {
   const colorScheme = process.env.EXPO_OS === "web" ? "dark" : useColorScheme();
+  
+  // Customize navigation theme with our theme colors
+  const navigationTheme = {
+    ...(colorScheme === "dark" ? DarkTheme : DefaultTheme),
+    colors: {
+      ...(colorScheme === "dark" ? DarkTheme.colors : DefaultTheme.colors),
+      primary: theme.colors.primary.main,
+      background: theme.colors.background.main,
+      card: theme.colors.background.card,
+      text: theme.colors.text.primary,
+      border: theme.colors.ui.border,
+      notification: theme.colors.semantic.error,
+    },
+  };
+
   return (
-    <RNTheme
-      // This isn't needed on iOS or web, but it's required on Android since the dynamic colors are broken
-      // https://github.com/facebook/react-native/issues/32823
-      value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      // value={colorScheme === "dark" ? BaconDarkTheme : BaconDefaultTheme}
-    >
-      {props.children}
-    </RNTheme>
+    <ThemeContext.Provider value={theme}>
+      <RNTheme value={navigationTheme}>{props.children}</RNTheme>
+    </ThemeContext.Provider>
   );
 }
