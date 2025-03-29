@@ -263,7 +263,7 @@ Customize the color, size, etc:
 
 Beautifully display a key/value pair with the `hint=""` property. This can also be created manually for extra customization.
 
-<img width="409" alt="Screenshot 2025-02-02 at 9 37 09 PM" src="https://github.com/user-attachments/assets/fd057783-1b76-4317-9425-cc0aae0baf97" />
+<img width="409" alt="Screenshot 2025-02-02 at 9 37 09 PM" src="https://github.com/user-attachments/assets/fd057783-1b76-4317-9425-cc0aae0baf97" />
 
 The key here is to use `flexShrink` to support floating to the right, then wrapping correctly when the text gets too long.
 
@@ -457,3 +457,95 @@ Other info:
 
 - The `systemImage` can be the name of an SF Symbol or a React node. This is useful for custom/animated icons.
 - `actions` can be provided for a list of buttons to render under the content, e.g. `<ContentUnavailable internet actions={<Button title="Refresh" />} />`
+
+# Gym App - Mobile Frontend
+
+A modern React Native application for gym management and fitness tracking built with Expo and TypeScript.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or newer)
+- [Bun](https://bun.sh/) (latest version)
+- [Xcode](https://developer.apple.com/xcode/) (for iOS development)
+- [Android Studio](https://developer.android.com/studio) (for Android development)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/gym-app.git
+cd gym-app
+```
+
+2. Install dependencies:
+```bash
+bun install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+Edit the `.env` file with your configuration.
+
+### Development
+
+Start the development server:
+```bash
+bun start
+```
+
+Run on iOS simulator:
+```bash
+bunx expo run:ios
+```
+
+Run on Android emulator:
+```bash
+bunx expo run:android
+```
+
+## 📁 Project Structure
+
+```
+gym-app/
+├── app/                   # App routes and navigation
+├── assets/               # Static assets (images, fonts)
+├── components/          # Reusable components
+│   ├── layout/         # Layout components
+│   ├── runtime/        # Runtime-specific components
+│   └── ui/             # UI components
+├── hooks/              # Custom React hooks
+├── ios/                # iOS native code
+└── android/            # Android native code
+```
+
+## 🛠 Tech Stack
+
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [React Navigation](https://reactnavigation.org/)
+
+## 📱 Features
+
+- Modern UI components
+- Type-safe development with TypeScript
+- Cross-platform support (iOS, Android, Web)
+- Hot reloading for rapid development
+- Scalable architecture
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
