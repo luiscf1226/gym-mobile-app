@@ -305,4 +305,416 @@ function MyScreen() {
 }
 ```
 
-This structure provides a solid foundation for building consistent and maintainable screens in the app. 
+This structure provides a solid foundation for building consistent and maintainable screens in the app.
+
+## Generic Components
+
+### 1. Button
+A customizable button component with various styles and states.
+
+```tsx
+import { Button } from '../components/ui/Button';
+
+<Button
+  variant="primary"
+  size="medium"
+  onPress={() => {}}
+  disabled={false}
+  loading={false}
+  leftIcon={<IconSymbol name="plus" />}
+  rightIcon={<IconSymbol name="arrow.right" />}
+>
+  Click Me
+</Button>
+```
+
+**Props:**
+```tsx
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  size?: 'small' | 'medium' | 'large';
+  onPress?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+  children: React.ReactNode;
+  width?: number | string;
+  height?: number | string;
+  borderRadius?: number;
+}
+```
+
+### 2. Input
+A flexible text input component with various configurations.
+
+```tsx
+import { Input } from '../components/ui/Input';
+
+<Input
+  label="Username"
+  placeholder="Enter username"
+  value={value}
+  onChangeText={setValue}
+  error="Invalid input"
+  leftIcon={<IconSymbol name="person" />}
+  rightIcon={<IconSymbol name="xmark" />}
+  onRightIconPress={() => setValue('')}
+/>
+```
+
+**Props:**
+```tsx
+interface InputProps {
+  label?: string;
+  placeholder?: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  error?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  onRightIconPress?: () => void;
+  secureTextEntry?: boolean;
+  keyboardType?: KeyboardTypeOptions;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  style?: ViewStyle;
+  inputStyle?: TextStyle;
+  labelStyle?: TextStyle;
+  errorStyle?: TextStyle;
+}
+```
+
+### 3. Card
+A container component with shadow and border radius.
+
+```tsx
+import { Card } from '../components/ui/Card';
+
+<Card
+  onPress={() => {}}
+  elevation={2}
+  style={{ padding: 16 }}
+>
+  <Text>Card Content</Text>
+</Card>
+```
+
+**Props:**
+```tsx
+interface CardProps {
+  children: React.ReactNode;
+  onPress?: () => void;
+  elevation?: number;
+  style?: ViewStyle;
+  contentStyle?: ViewStyle;
+  borderRadius?: number;
+  backgroundColor?: string;
+}
+```
+
+### 4. Text
+Typography component with predefined styles and variants.
+
+```tsx
+import { Text } from '../components/ui/Text';
+
+<Text
+  variant="h1"
+  weight="bold"
+  color="primary"
+>
+  Hello World
+</Text>
+```
+
+**Props:**
+```tsx
+interface TextProps {
+  variant?: 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'label';
+  weight?: 'regular' | 'medium' | 'semibold' | 'bold';
+  color?: 'primary' | 'secondary' | 'error' | 'success' | string;
+  align?: 'left' | 'center' | 'right';
+  style?: TextStyle;
+  children: React.ReactNode;
+  numberOfLines?: number;
+  ellipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
+}
+```
+
+### 5. Avatar
+User avatar component with image or initials fallback.
+
+```tsx
+import { Avatar } from '../components/ui/Avatar';
+
+<Avatar
+  source={{ uri: 'https://example.com/avatar.jpg' }}
+  initials="JD"
+  size={40}
+  borderColor="primary"
+/>
+```
+
+**Props:**
+```tsx
+interface AvatarProps {
+  source?: ImageSourcePropType;
+  initials?: string;
+  size?: number;
+  borderColor?: string;
+  borderWidth?: number;
+  style?: ViewStyle;
+}
+```
+
+### 6. Badge
+Small status indicator or counter.
+
+```tsx
+import { Badge } from '../components/ui/Badge';
+
+<Badge
+  count={5}
+  variant="error"
+  size="small"
+/>
+```
+
+**Props:**
+```tsx
+interface BadgeProps {
+  count?: number;
+  variant?: 'primary' | 'error' | 'success' | 'warning';
+  size?: 'small' | 'medium' | 'large';
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+  maxCount?: number;
+  dot?: boolean;
+}
+```
+
+### 7. List
+Customizable list component with various item layouts.
+
+```tsx
+import { List } from '../components/ui/List';
+
+<List
+  data={items}
+  renderItem={({ item }) => (
+    <List.Item
+      title={item.title}
+      subtitle={item.subtitle}
+      leftIcon={<IconSymbol name={item.icon} />}
+      rightIcon={<IconSymbol name="chevron.right" />}
+      onPress={() => handlePress(item)}
+    />
+  )}
+  separatorStyle={{ height: 1, backgroundColor: '#eee' }}
+/>
+```
+
+**Props:**
+```tsx
+interface ListProps<T> {
+  data: T[];
+  renderItem: ({ item, index }: { item: T; index: number }) => React.ReactNode;
+  keyExtractor?: (item: T, index: number) => string;
+  ItemSeparatorComponent?: React.ComponentType;
+  separatorStyle?: ViewStyle;
+  style?: ViewStyle;
+  contentContainerStyle?: ViewStyle;
+  showsVerticalScrollIndicator?: boolean;
+  onRefresh?: () => void;
+  refreshing?: boolean;
+}
+```
+
+### 8. Modal
+Customizable modal component with various animations.
+
+```tsx
+import { Modal } from '../components/ui/Modal';
+
+<Modal
+  visible={isVisible}
+  onClose={() => setIsVisible(false)}
+  animationType="slide"
+  height={300}
+>
+  <Modal.Header title="Modal Title" />
+  <Modal.Content>
+    <Text>Modal content goes here</Text>
+  </Modal.Content>
+  <Modal.Footer>
+    <Button onPress={() => setIsVisible(false)}>Close</Button>
+  </Modal.Footer>
+</Modal>
+```
+
+**Props:**
+```tsx
+interface ModalProps {
+  visible: boolean;
+  onClose: () => void;
+  animationType?: 'none' | 'slide' | 'fade';
+  height?: number | string;
+  width?: number | string;
+  style?: ViewStyle;
+  contentStyle?: ViewStyle;
+  backdropStyle?: ViewStyle;
+  children: React.ReactNode;
+}
+```
+
+### 9. Checkbox
+Customizable checkbox component with various states.
+
+```tsx
+import { Checkbox } from '../components/ui/Checkbox';
+
+<Checkbox
+  checked={isChecked}
+  onChange={setIsChecked}
+  label="Remember me"
+  disabled={false}
+/>
+```
+
+**Props:**
+```tsx
+interface CheckboxProps {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label?: string;
+  disabled?: boolean;
+  style?: ViewStyle;
+  labelStyle?: TextStyle;
+  size?: number;
+  activeColor?: string;
+  inactiveColor?: string;
+}
+```
+
+### 10. Switch
+Toggle switch component with customizable styles.
+
+```tsx
+import { Switch } from '../components/ui/Switch';
+
+<Switch
+  value={isEnabled}
+  onValueChange={setIsEnabled}
+  disabled={false}
+  label="Enable notifications"
+/>
+```
+
+**Props:**
+```tsx
+interface SwitchProps {
+  value: boolean;
+  onValueChange: (value: boolean) => void;
+  disabled?: boolean;
+  label?: string;
+  style?: ViewStyle;
+  labelStyle?: TextStyle;
+  trackColor?: { false: string; true: string };
+  thumbColor?: string;
+}
+```
+
+## Usage with Theme
+
+All components support theme customization through the ThemeProvider:
+
+```tsx
+import { ThemeProvider } from '../components/ui/ThemeProvider';
+
+const theme = {
+  colors: {
+    primary: '#007AFF',
+    secondary: '#5856D6',
+    success: '#34C759',
+    error: '#FF3B30',
+    warning: '#FF9500',
+    background: '#FFFFFF',
+    text: '#000000',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+  typography: {
+    h1: { fontSize: 32, lineHeight: 40 },
+    h2: { fontSize: 24, lineHeight: 32 },
+    body: { fontSize: 16, lineHeight: 24 },
+  },
+  // ... other theme values
+};
+
+export default function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <YourApp />
+    </ThemeProvider>
+  );
+}
+```
+
+## Composition Example
+
+Here's how to compose multiple components together:
+
+```tsx
+import { Card, Text, Button, Stack } from '../components/ui';
+
+function ProductCard({ product }) {
+  return (
+    <Card style={{ padding: 16 }}>
+      <Stack spacing={8}>
+        <Text variant="h2">{product.name}</Text>
+        <Text variant="body">{product.description}</Text>
+        <Text variant="h3" color="primary">${product.price}</Text>
+        <Button 
+          variant="primary"
+          onPress={() => handleBuy(product)}
+          leftIcon={<IconSymbol name="cart" />}
+        >
+          Add to Cart
+        </Button>
+      </Stack>
+    </Card>
+  );
+}
+```
+
+## Responsive Design
+
+All components support responsive design through style props and the useWindowDimensions hook:
+
+```tsx
+import { useWindowDimensions } from 'react-native';
+import { Card, Stack } from '../components/ui';
+
+function ResponsiveLayout() {
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width < 768;
+
+  return (
+    <Stack
+      direction={isSmallScreen ? 'vertical' : 'horizontal'}
+      spacing={isSmallScreen ? 16 : 24}
+    >
+      <Card style={{ flex: isSmallScreen ? 0 : 1 }}>
+        {/* Content */}
+      </Card>
+    </Stack>
+  );
+}
+``` 
