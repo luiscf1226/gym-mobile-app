@@ -1,0 +1,12 @@
+{
+  "home": {
+    "appName": "EasyFit",
+    "tagline": "Begin Your Fitness Journey",
+    "getStarted": "GET STARTED",
+    "login": "LOG IN",
+    "termsText": "By continuing, you agree to our",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy",
+    "andText": "&"
+  }
+} 
