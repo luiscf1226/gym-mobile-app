@@ -8,5 +8,14 @@
     "termsLink": "Terms of Service",
     "privacyLink": "Privacy Policy",
     "andText": "&"
+  },
+  "signup": {
+    "title": "Create Account",
+    "subtitle": "Join the fitness adventure",
+    "fullName": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "CREATE ACCOUNT"
   }
 } 
