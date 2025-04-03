@@ -1,38 +1,41 @@
-import ThemeProvider from "@/components/ui/ThemeProvider";
-import { Text, View, StyleSheet } from "react-native";
-import { useTheme } from "@/components/ui/ThemeProvider";
+import { Stack } from 'expo-router';
+import ThemeProvider from '@/components/ui/ThemeProvider';
+import { AuthProvider } from '@/app/contexts/AuthContext';
+import { StatusBar } from "expo-status-bar";
+import { View, StyleSheet } from "react-native";
 
-export default function Layout() {
+export const unstable_settings = {
+  initialRouteName: "(auth)",
+};
+
+export default function RootLayout() {
   return (
     <ThemeProvider>
-      <MainContent />
+      <AuthProvider>
+        <View style={styles.container}>
+          <StatusBar style="light" />
+          <Stack>
+            <Stack.Screen
+              name="(auth)"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(main)"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </View>
+      </AuthProvider>
     </ThemeProvider>
-  );
-}
-
-function MainContent() {
-  const theme = useTheme();
-  
-  return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.main }]}>
-      <Text style={[styles.text, { 
-        color: theme.colors.text.primary,
-        fontFamily: theme.typography.fontFamily.heading,
-        fontSize: theme.typography.fontSize['2xl']
-      }]}>
-        Hello
-      </Text>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  text: {
-    textAlign: 'center',
-  }
 });

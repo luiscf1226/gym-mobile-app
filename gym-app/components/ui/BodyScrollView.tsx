@@ -19,7 +19,8 @@ export const BodyScrollView = forwardRef<any, ScrollViewProps>((props, ref) => {
 
   useScrollToTop(scrollRef, -largeHeaderInset);
 
-  const merged = useMergedRef(scrollRef, ref);
+  // Convert forwardedRef to a normal ref that useMergedRef can handle
+  const merged = useMergedRef(scrollRef, ref || undefined);
 
   return (
     <Animated.ScrollView
