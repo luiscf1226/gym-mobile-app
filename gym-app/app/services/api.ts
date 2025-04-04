@@ -14,6 +14,22 @@ export interface SignupRequest {
   password: string;
 }
 
+// Login types
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user_id: string;
+  email: string;
+  subscription_tier: string;
+  ai_features_included: boolean;
+  max_workouts_per_month: number | null;
+  access_token: string;
+  refresh_token: string;
+}
+
 // Error types
 export interface ApiError {
   message: string;
@@ -137,6 +153,64 @@ export class ApiService {
       }
       console.error('Unexpected error during signup:', error);
       throw new Error('An unexpected error occurred during signup');
+    }
+  }
+
+  // Login method
+  public async login(data: LoginRequest): Promise<LoginResponse> {
+    try {
+      console.log('Attempting login with:', { 
+        email: data.email,
+        baseURL: ENV.API_URL 
+      });
+
+      const response = await api.post<LoginResponse>('/api/auth/login', data);
+      
+      console.log('Login successful:', { 
+        userId: response.data.user_id,
+        email: response.data.email,
+        subscription: response.data.subscription_tier
+      });
+      
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiError: ApiError = {
+          message: error.response?.data?.message || 'Failed to log in',
+          status: error.response?.status,
+          data: error.response?.data,
+        };
+        
+        console.error('Login failed:', {
+          status: apiError.status,
+          message: apiError.message,
+          data: apiError.data,
+          config: {
+            url: error.config?.url,
+            method: error.config?.method,
+            baseURL: error.config?.baseURL,
+            data: error.config?.data,
+            headers: error.config?.headers,
+          }
+        });
+
+        // Handle specific error cases
+        if (!error.response) {
+          throw new Error('Network error. Please check your connection and try again');
+        } else if (error.response.status === 400) {
+          throw new Error('Invalid email or password format');
+        } else if (error.response.status === 401) {
+          throw new Error('Invalid email or password');
+        } else if (error.response.status === 404) {
+          throw new Error('Account not found');
+        } else if (error.response.status === 500) {
+          throw new Error('Server error. Please try again later');
+        } else {
+          throw new Error(apiError.message || 'Failed to log in');
+        }
+      }
+      console.error('Unexpected error during login:', error);
+      throw new Error('An unexpected error occurred during login');
     }
   }
 } 
