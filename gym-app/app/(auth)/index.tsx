@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/components/ui/ThemeProvider';
 import Button from '@/components/ui/Button';
 import Logo from '@/assets/images/logo';
 import { t } from '@/app/utils/localization';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function HomeScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const { isAuthenticated, isLoading, checkAuth } = useAuth();
+
+  // Check authentication status and token validity
+  useEffect(() => {
+    const verifyAuth = async () => {
+      if (!isLoading) {
+        // If authenticated, check if token is valid
+        if (isAuthenticated) {
+          const isValid = await checkAuth();
+          if (isValid) {
+            router.replace('/(main)/home');
+          }
+        }
+      }
+    };
+    
+    verifyAuth();
+  }, [isLoading, isAuthenticated, checkAuth, router]);
 
   const handleGetStarted = () => {
     router.push('/signup');
@@ -17,6 +36,29 @@ export default function HomeScreen() {
   const handleLogin = () => {
     router.push('/login');
   };
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.colors.background.main }]}>
+        <Text style={[
+          styles.appName, 
+          { 
+            color: theme.colors.text.primary,
+            fontFamily: theme.typography.fontFamily.heading,
+            fontSize: theme.typography.fontSize['4xl']
+          }
+        ]}>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
+  // If already authenticated, don't render anything (will be redirected)
+  if (isAuthenticated) {
+    return null;
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.main }]}>

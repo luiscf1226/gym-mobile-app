@@ -30,6 +30,16 @@ export interface LoginResponse {
   refresh_token: string;
 }
 
+// Refresh token types
+export interface RefreshTokenRequest {
+  refresh_token: string;
+}
+
+export interface RefreshTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
 // Error types
 export interface ApiError {
   message: string;
@@ -211,6 +221,54 @@ export class ApiService {
       }
       console.error('Unexpected error during login:', error);
       throw new Error('An unexpected error occurred during login');
+    }
+  }
+
+  // Refresh token method
+  public async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
+    try {
+      console.log('Attempting to refresh token');
+      
+      const response = await api.post<RefreshTokenResponse>('/api/auth/refresh', {
+        refresh_token: refreshToken
+      });
+      
+      console.log('Token refresh successful');
+      
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiError: ApiError = {
+          message: error.response?.data?.message || 'Failed to refresh token',
+          status: error.response?.status,
+          data: error.response?.data,
+        };
+        
+        console.error('Token refresh failed:', {
+          status: apiError.status,
+          message: apiError.message,
+          data: apiError.data,
+        });
+
+        // Handle specific error cases
+        if (!error.response) {
+          throw new Error('Network error. Please check your connection and try again');
+        } else if (error.response.status === 400) {
+          throw new Error('Invalid refresh token format');
+        } else if (error.response.status === 401) {
+          throw new Error('Refresh token expired or invalid');
+        } else if (error.response.status === 403) {
+          throw new Error('Access denied. Please log in again');
+        } else if (error.response.status === 404) {
+          throw new Error('Refresh token not found');
+        } else if (error.response.status === 500) {
+          throw new Error('Server error. Please try again later');
+        } else {
+          throw new Error(apiError.message || 'Failed to refresh token');
+        }
+      }
+      console.error('Unexpected error during token refresh:', error);
+      throw new Error('An unexpected error occurred during token refresh');
     }
   }
 } 

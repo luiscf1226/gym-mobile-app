@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
 import { useTheme } from '@/components/ui/ThemeProvider';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { useRouter } from 'expo-router';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function HomeScreen() {
+export default function MainLayout() {
   const theme = useTheme();
-  const { authData, isAuthenticated, isLoading, checkAuth } = useAuth();
+  const { isAuthenticated, isLoading, checkAuth } = useAuth();
   const router = useRouter();
 
   // Check authentication status and token validity
@@ -35,11 +35,11 @@ export default function HomeScreen() {
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.background.main }]}>
         <Text style={[
-          styles.title,
+          styles.loadingText,
           {
             color: theme.colors.text.primary,
             fontFamily: theme.typography.fontFamily.heading,
-            fontSize: theme.typography.fontSize['3xl']
+            fontSize: theme.typography.fontSize['2xl']
           }
         ]}>
           Loading...
@@ -54,29 +54,34 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.main }]}>
-      <Text style={[
-        styles.title,
-        {
-          color: theme.colors.text.primary,
-          fontFamily: theme.typography.fontFamily.heading,
-          fontSize: theme.typography.fontSize['3xl']
-        }
-      ]}>
-        Welcome, {authData?.email}
-      </Text>
-    </View>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: theme.colors.background.main,
+        },
+        animation: 'slide_from_right',
+      }}
+    >
+      <Stack.Screen 
+        name="home" 
+        options={{ 
+          headerShown: false,
+          animation: 'none',
+        }} 
+      />
+      {/* Add other main screens here */}
+    </Stack>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
+  loadingText: {
     textAlign: 'center',
   },
 }); 

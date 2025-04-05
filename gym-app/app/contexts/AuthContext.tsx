@@ -7,6 +7,7 @@ interface AuthContextType {
   setAuthData: (data: AuthData) => Promise<void>;
   clearAuthData: () => Promise<void>;
   isAuthenticated: boolean;
+  checkAuth: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,10 +23,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadAuthData = async () => {
     try {
+      console.log('Loading authentication data');
       const data = await authService.getAuthData();
-      setAuthDataState(data);
+      
+      if (data) {
+        console.log('Auth data found, setting state');
+        setAuthDataState(data);
+        
+        // If we have auth data, check if the token needs to be refreshed
+        console.log('Checking if token needs to be refreshed');
+        await checkAuth();
+      } else {
+        console.log('No auth data found');
+        setAuthDataState(null);
+      }
     } catch (error) {
       console.error('Error loading auth data:', error);
+      setAuthDataState(null);
     } finally {
       setIsLoading(false);
     }
@@ -51,6 +65,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const checkAuth = async (): Promise<boolean> => {
+    try {
+      console.log('Checking authentication status');
+      
+      const isValid = await authService.checkAndRefreshToken();
+      
+      // If token is invalid, clear auth data
+      if (!isValid && authData) {
+        console.log('Token is invalid, clearing auth data');
+        await clearAuthData();
+      } else if (isValid) {
+        console.log('Token is valid, authentication successful');
+      }
+      
+      return isValid;
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      return false;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -59,6 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setAuthData,
         clearAuthData,
         isAuthenticated: !!authData,
+        checkAuth,
       }}
     >
       {children}
