@@ -3,6 +3,7 @@ import { Stack, useRouter } from 'expo-router';
 import { useTheme } from '@/components/ui/ThemeProvider';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { View, Text, StyleSheet } from 'react-native';
+import BottomNavigation from '@/components/ui/BottomNavigation';
 
 export default function MainLayout() {
   const theme = useTheme();
@@ -54,24 +55,27 @@ export default function MainLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: {
-          backgroundColor: theme.colors.background.main,
-        },
-        animation: 'slide_from_right',
-      }}
-    >
-      <Stack.Screen 
-        name="home" 
-        options={{ 
+    <View style={styles.mainContainer}>
+      <Stack
+        screenOptions={{
           headerShown: false,
-          animation: 'none',
-        }} 
-      />
-      {/* Add other main screens here */}
-    </Stack>
+          contentStyle: {
+            backgroundColor: theme.colors.background.main,
+          },
+          animation: 'slide_from_right',
+        }}
+      >
+        <Stack.Screen 
+          name="home" 
+          options={{ 
+            headerShown: false,
+            animation: 'none',
+          }} 
+        />
+        {/* Add other main screens here */}
+      </Stack>
+      <BottomNavigation />
+    </View>
   );
 }
 
@@ -80,6 +84,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  mainContainer: {
+    flex: 1,
   },
   loadingText: {
     textAlign: 'center',
